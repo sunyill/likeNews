@@ -2,13 +2,13 @@
  * @Description: 配置路由
  * @Author: your name
  * @Date: 2019-09-18 20:06:10
- * @LastEditTime: 2019-09-18 20:40:49
+ * @LastEditTime: 2019-09-18 21:09:10
  * @LastEditors: Please set LastEditors
  */
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
-
+import Login from './views/Login'
 Vue.use(Router)
 
 export default new Router({
@@ -17,6 +17,11 @@ export default new Router({
       path: '/',
       name: 'home',
       component: Home
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     }
     // {
     // path: '/about',
