@@ -71,8 +71,16 @@ export default {
     loginPass () {
       this.$refs.loginForm.validate(isOk => {
         if (isOk) {
-          console.log('this is pass homePage')
-          this.$router.push('./')
+          // console.log('this is pass homePage')
+
+          this.$axios({
+            url: '/authorizations',
+            method: 'post',
+            data: this.formData
+          }).then(res => {
+            console.log(res.data.data)
+            this.$router.push('./')
+          })
         }
       })
     }
