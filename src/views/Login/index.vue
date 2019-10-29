@@ -43,8 +43,8 @@ export default {
     }
     return {
       formData: {
-        mobile: '13911111111',
-        code: '246810',
+        mobile: '13911111112',
+        code: '246811',
         check: false
       },
       rules: {
@@ -72,7 +72,6 @@ export default {
       this.$refs.loginForm.validate(isOk => {
         if (isOk) {
           // console.log('this is pass homePage')
-
           this.$axios({
             url: '/authorizations',
             method: 'post',
@@ -81,6 +80,11 @@ export default {
             console.log(res.data.data)
             window.localStorage.setItem('user-info', JSON.stringify(res.data.data))
             this.$router.push('./home')
+          }).catch(() => {
+            this.$message({
+              message: '用户名或密码错误',
+              type: 'warning'
+            })
           })
         }
       })
