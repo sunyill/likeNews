@@ -6,9 +6,13 @@
  * @LastEditors: Please set LastEditors
  -->
 <template>
-  <div>
-      this is indexPage
-  </div>
+  <el-container>
+    <el-aside>侧栏内容</el-aside>
+  <el-container>
+    <el-header>内容顶部区域</el-header>
+    <el-main>内容显示区域</el-main>
+  </el-container>
+  </el-container>
 </template>
 
 <script>
