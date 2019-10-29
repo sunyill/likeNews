@@ -79,7 +79,8 @@ export default {
             data: this.formData
           }).then(res => {
             console.log(res.data.data)
-            this.$router.push('./')
+            window.localStorage.setItem('user-info', JSON.stringify(res.data.data))
+            this.$router.push('./home')
           })
         }
       })
