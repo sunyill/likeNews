@@ -11,7 +11,9 @@
       <layout-aside></layout-aside>
     </el-aside>
   <el-container>
-    <el-header>内容顶部区域</el-header>
+    <el-header>
+      <layout-header></layout-header>
+    </el-header>
     <el-main>内容显示区域</el-main>
   </el-container>
   </el-container>
@@ -19,9 +21,11 @@
 
 <script>
 import layoutAside from '@/components/home/layout_aside.vue'
+import layoutHeader from '@/components/home/layout_header.vue'
 export default {
   components: {
-    layoutAside
+    layoutAside,
+    layoutHeader
   }
 }
 </script>
