@@ -7,7 +7,9 @@
  -->
 <template>
   <el-container>
-    <el-aside>侧栏内容</el-aside>
+    <el-aside style="width:200px;height:100vh;background-color:#bfd5d9">
+      <layout-aside></layout-aside>
+    </el-aside>
   <el-container>
     <el-header>内容顶部区域</el-header>
     <el-main>内容显示区域</el-main>
@@ -16,8 +18,11 @@
 </template>
 
 <script>
+import layoutAside from '@/components/home/layout_aside.vue'
 export default {
-
+  components: {
+    layoutAside
+  }
 }
 </script>
 
