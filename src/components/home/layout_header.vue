@@ -8,15 +8,15 @@
 
     <el-col :span="4" class="right-header">
       <img :src="user.photo?user.photo:defaultImg" alt />
-      <el-dropdown trigger="click">
+      <el-dropdown trigger="click" @command="hanlderInfo">
         <span class="el-dropdown-link">
           {{ user.name }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item>个人信息</el-dropdown-item>
-          <el-dropdown-item>git地址</el-dropdown-item>
-          <el-dropdown-item>退出</el-dropdown-item>
+          <el-dropdown-item command='personInfo'>个人信息</el-dropdown-item>
+          <el-dropdown-item command='git'>git地址</el-dropdown-item>
+          <el-dropdown-item command='exit'>退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-col>
@@ -32,6 +32,17 @@ export default {
     }
   },
   methods: {
+    // 处理下拉事件
+    hanlderInfo (command) {
+      if (command === 'personInfo') {
+        this.$alert('用户信息')
+      } else if (command === 'git') {
+        window.location.href = 'https://github.com/sunyill/likeNews'
+      } else if (command === 'exit') {
+        window.localStorage.clear()
+        this.$router.push('/login')
+      }
+    },
     // 获取用户信息
     getUserInfo () {
       // 从localstorage中取数据
