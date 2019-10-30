@@ -1,7 +1,7 @@
 <template>
   <!-- 属性gutter 表示每一栏之间的间隔 -->
   <el-row class="layout-header" type="flex" justify="space-between">
-    <el-col :span="6" class="left-header">
+    <el-col :span="16" class="left-header">
       <i class="el-icon-s-unfold"></i>
       <span>ElementUi工作室</span>
     </el-col>
@@ -14,9 +14,9 @@
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item command='personInfo'>个人信息</el-dropdown-item>
-          <el-dropdown-item command='git'>git地址</el-dropdown-item>
-          <el-dropdown-item command='exit'>退出</el-dropdown-item>
+          <el-dropdown-item command="personInfo">个人信息</el-dropdown-item>
+          <el-dropdown-item command="git">git地址</el-dropdown-item>
+          <el-dropdown-item command="exit">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
     </el-col>
@@ -45,14 +45,8 @@ export default {
     },
     // 获取用户信息
     getUserInfo () {
-      // 从localstorage中取数据
-      var userinfo = window.localStorage.getItem('user-info')
-      // 判断token是否存在
-      var token = userinfo ? JSON.parse(userinfo).token : null
-      token && this.$axios({
-        url: '/user/profile',
-        method: 'GET',
-        headers: { 'Authorization': `Bearer ${token}` }
+      this.$axios({
+        url: '/user/profile'
       }).then(res => {
         console.log(res.data.data)
         this.user = res.data.data

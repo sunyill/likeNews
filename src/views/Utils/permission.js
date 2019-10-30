@@ -1,7 +1,7 @@
 import router from '../../router'
 // 路由首页, 进行鉴权
 router.beforeEach(function (to, from, next) {
-  if (to.path.startswith('/home')) {
+  if (to.path.startsWith('/home')) {
     // 从内存中取token
     var result = window.localStorage.getItem('user-info')
 
