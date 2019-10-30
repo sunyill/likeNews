@@ -9,6 +9,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home'
 import Login from './views/Login'
+import Main from './views/Home/main.vue'
 Vue.use(Router)
 
 export default new Router({
@@ -20,7 +21,12 @@ export default new Router({
     {
       path: '/home',
       name: 'home',
-      component: Home
+      component: Home,
+      // 添加的二级路由Main区域显示界面
+      children: [{
+        path: '',
+        component: Main
+      }]
     },
     {
       path: '/login',
