@@ -44,7 +44,7 @@ export default {
     return {
       formData: {
         mobile: '13911111112',
-        code: '246811',
+        code: '246810',
         check: false
       },
       rules: {

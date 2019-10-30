@@ -13,10 +13,10 @@
           <i class="el-icon-message"></i>内容摘要
         </template>
         <el-menu-item-group>
-          <el-menu-item index="1-1">发表文章</el-menu-item>
-          <el-menu-item index="1-2">内容列表</el-menu-item>
-          <el-menu-item index="1-3">素材管理</el-menu-item>
-          <el-menu-item index="1-4">评论列表</el-menu-item>
+          <el-menu-item style="color:green" index="1-1">发表文章</el-menu-item>
+          <el-menu-item style="color:green" index="1-2">内容列表</el-menu-item>
+          <el-menu-item style="color:green" index="1-3">素材管理</el-menu-item>
+          <el-menu-item style="color:green" index="1-4">评论列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
 
@@ -24,11 +24,11 @@
         <template slot="title">
           <i class="el-icon-menu"></i>乐友管理
         </template>
-        <el-menu-item-group>
-          <el-menu-item index="1-1">图文数据</el-menu-item>
-          <el-menu-item index="1-2">乐友概况</el-menu-item>
-          <el-menu-item index="1-3">乐友画像</el-menu-item>
-          <el-menu-item index="1-4">乐友列表</el-menu-item>
+        <el-menu-item-group >
+          <el-menu-item style="color:green" index="1-1">图文数据</el-menu-item>
+          <el-menu-item style="color:green" index="1-2">乐友概况</el-menu-item>
+          <el-menu-item style="color:green" index="1-3">乐友画像</el-menu-item>
+          <el-menu-item style="color:green" index="1-4">乐友列表</el-menu-item>
         </el-menu-item-group>
       </el-submenu>
       <el-menu-item>

@@ -7,10 +7,10 @@
     </el-col>
 
     <el-col :span="4" class="right-header">
-      <img src="../../assets/img/avatar.jpg" alt />
+      <img :src="user.photo?user.photo:defaultImg" alt />
       <el-dropdown trigger="click">
         <span class="el-dropdown-link">
-          我是56123
+          {{ user.name }}
           <i class="el-icon-arrow-down el-icon--right"></i>
         </span>
         <el-dropdown-menu slot="dropdown">
@@ -24,7 +24,34 @@
 </template>
 
 <script>
-export default {}
+export default {
+  data () {
+    return {
+      user: {},
+      defaultImg: require('../../assets/img/avatar.jpg')
+    }
+  },
+  methods: {
+    // 获取用户信息
+    getUserInfo () {
+      // 从localstorage中取数据
+      var userinfo = window.localStorage.getItem('user-info')
+      // 判断token是否存在
+      var token = userinfo ? JSON.parse(userinfo).token : null
+      token && this.$axios({
+        url: '/user/profile',
+        method: 'GET',
+        headers: { 'Authorization': `Bearer ${token}` }
+      }).then(res => {
+        console.log(res.data.data)
+        this.user = res.data.data
+      })
+    }
+  },
+  created () {
+    this.getUserInfo()
+  }
+}
 </script>
 
 <style lang='less' scoped>
