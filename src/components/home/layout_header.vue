@@ -35,7 +35,7 @@ export default {
     // 处理下拉事件
     hanlderInfo (command) {
       if (command === 'personInfo') {
-        this.$alert('用户信息')
+        this.$router.push('/home/account')
       } else if (command === 'git') {
         window.location.href = 'https://github.com/sunyill/likeNews'
       } else if (command === 'exit') {

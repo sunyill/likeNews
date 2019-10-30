@@ -14,7 +14,9 @@
     <el-header>
       <layout-header></layout-header>
     </el-header>
-    <el-main>内容显示区域</el-main>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
   </el-container>
   </el-container>
 </template>
