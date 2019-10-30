@@ -7,7 +7,7 @@
  */
 import Vue from 'vue'
 import App from './App.vue'
-import router from './router'
+import router from './views/Utils/permission'
 // 重置全局样式
 import './styles/index.less'
 // 注册elementUi
