@@ -26,6 +26,11 @@ export default new Router({
       children: [{
         path: '',
         component: Main
+      },
+      { // 评论列表页面
+        path: '/home/comment',
+        name: 'Comment',
+        component: () => import(/* webpackChunkName: "Comment" */ './views/Comment')
       }]
     },
     {
