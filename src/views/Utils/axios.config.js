@@ -1,11 +1,19 @@
 import axios from 'axios'
 // 获取message
 import { Message } from 'element-ui'
+// 统一处理大数字
+import JSONBig from 'json-bigint'
 /**
  * 封装axios拦截器
  */
 // 配置axios的默认url
 axios.defaults.baseURL = 'http://ttapi.research.itcast.cn/mp/v1_0'
+// 大数字做的处理
+axios.defaults.transformResponse = [
+  function (data) {
+    return data ? JSONBig.parse(data) : {}
+  }
+]
 // 在发起请求时 做的一些处理
 // 请求拦截器
 axios.interceptors.request.use(function (config) {
@@ -51,6 +59,6 @@ axios.interceptors.response.use(function (response) {
   }
   Message({ message, type: 'warning' })
   // return Promise.reject(error)
-  return new Promise()
+  return new Promise(function () {})
 })
 export default axios
