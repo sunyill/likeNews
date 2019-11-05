@@ -3,7 +3,7 @@
     <div class="login">
       <img src="../../assets/img/home_logo.png" alt />
     </div>
-    <el-menu background-color="#bfd5d9" text-color="#fff" active-text-color="#ffd04b" router>
+    <el-menu background-color="#bfd5d9"  text-color="#fff" active-text-color="#ffd04b" router>
       <el-menu-item index="/home">
         <i class="el-icon-s-home"></i>
         <span>首页</span>
