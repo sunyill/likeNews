@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading='false'>
     <!-- 面包屑 -->
     <bread-crumb slot="header">
       <template slot="title">评论列表</template>
@@ -45,7 +45,8 @@ export default {
         pageSize: 10,
         currentPage: 1,
         total: 0
-      }
+      },
+      loading: false
     }
   },
   methods: {
@@ -73,6 +74,7 @@ export default {
       })
     },
     getComment () {
+      this.loading = true
       let pageParams = {
         page: this.page.currentPage,
         per_page: this.page.pageSize // 页面参数
@@ -87,6 +89,7 @@ export default {
         console.log(result)
         this.list = result.data.results // 取到列表数据 给 当前的数据对象
         this.page.total = result.data.total_count // 文章评论列表总数 赋值给当前页面总数
+        this.loading = false
       })
     },
     // row 当条数据对象
