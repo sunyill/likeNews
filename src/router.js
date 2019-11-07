@@ -36,6 +36,10 @@ export default new Router({
         path: '/home/material',
         name: 'Material',
         component: () => import(/* webpackChunkName:"Material" */ './views/Material')
+      }, {// 内容列表
+        path: '/home/contentList',
+        name: 'ContentList',
+        component: () => import(/* webpackChunkName:'ContentList' */ './views/Articles')
       }]
     },
     {

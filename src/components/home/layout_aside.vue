@@ -14,7 +14,7 @@
         </template>
         <el-menu-item-group>
           <el-menu-item style="color:green" index="/home/publish">发表文章</el-menu-item>
-          <el-menu-item style="color:green" index="/home/list">内容列表</el-menu-item>
+          <el-menu-item style="color:green" index="/home/contentList">内容列表</el-menu-item>
           <el-menu-item style="color:green" index="/home/material">素材管理</el-menu-item>
           <el-menu-item style="color:green" index="/home/comment">评论列表</el-menu-item>
         </el-menu-item-group>
