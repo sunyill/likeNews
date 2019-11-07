@@ -10,14 +10,14 @@
     <el-aside style="width:200px;height:100vh;background-color:#bfd5d9">
       <layout-aside></layout-aside>
     </el-aside>
-  <el-container>
-    <el-header>
-      <layout-header></layout-header>
-    </el-header>
-    <el-main style="padding:0">
-      <router-view></router-view>
-    </el-main>
-  </el-container>
+    <el-container>
+      <el-header>
+        <layout-header></layout-header>
+      </el-header>
+      <el-main style="padding:0">
+        <router-view></router-view>
+      </el-main>
+    </el-container>
   </el-container>
 </template>
 
@@ -33,5 +33,4 @@ export default {
 </script>
 
 <style>
-
 </style>

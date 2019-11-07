@@ -3,6 +3,10 @@
     <bread-crumb slot="header">
       <template slot="title">素材管理</template>
     </bread-crumb>
+    <!-- 上传组件 -->
+    <el-upload :show-file-list="false" :http-request="uploadImg" action class="upload-material">
+      <el-button type="success">上传素材</el-button>
+    </el-upload>
     <!--Tabs 标签页 分隔内容上有关联但属于不同类别的数据集合。 -->
     <el-tabs v-model="activeName" @tab-click="tabChange">
       <el-tab-pane label="全部图片" name="all">
@@ -57,7 +61,7 @@ export default {
       list: [],
       activeName: 'all',
       page: {
-        pageSize: 15,
+        pageSize: 10,
         currentPage: 1,
         total: 0
       }
@@ -103,7 +107,7 @@ export default {
           data: {
             collect: !item.is_collected // 取相反的状态
           }
-        }).then((result) => {
+        }).then(result => {
           this.getMaterial()
         })
       })
@@ -114,9 +118,21 @@ export default {
         this.$axios({
           url: `/user/images/${item.id}`,
           method: 'delete'
-        }).then((result) => {
+        }).then(result => {
           this.getMaterial()
         })
+      })
+    },
+    // 上传素材
+    uploadImg (params) {
+      let fd = new FormData()
+      fd.append('image', params.file)
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data: fd
+      }).then(() => {
+        this.getMaterial()
       })
     }
   },
@@ -127,6 +143,12 @@ export default {
 </script>
 
 <style lang='less' scoped>
+.upload-material {
+  position: absolute;
+  z-index: 10;
+  right: 20px;
+  margin-top: -10px;
+}
 .img-list {
   display: flex;
   justify-content: space-around;
