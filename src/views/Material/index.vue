@@ -10,8 +10,12 @@
           <el-card class="img-card" v-for="item in list" :key="item.id">
             <img :src="item.url" />
             <el-row align="middle" class="operate" type="flex" justify="space-around">
-              <i class="el-icon-delete-solid" />
-              <i class="el-icon-star-on" />
+              <i
+                class="el-icon-star-on"
+                @click="OkOrCancle(item)"
+                :style="{color:item.is_collected?'red':''}"
+              />
+              <i class="el-icon-delete-solid" @click="deleteMaterial(item)" />
             </el-row>
           </el-card>
         </div>
@@ -87,6 +91,33 @@ export default {
         this.list = result.data.results
         this.page.total = result.data.total_count
       })
+    },
+    // 收藏或者取消
+    OkOrCancle (item) {
+      // is_collected 是否收藏,为true时,则是收藏,点击时,取反状态
+      let msg = item.is_collected ? '取消收藏' : '收藏'
+      this.$confirm(`您确定要${msg}此图片吗?`, '提示').then(() => {
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'put',
+          data: {
+            collect: !item.is_collected // 取相反的状态
+          }
+        }).then((result) => {
+          this.getMaterial()
+        })
+      })
+    },
+    // 删除素材
+    deleteMaterial (item) {
+      this.$confirm(`您确定要删除此照片嘛`, '提示').then(() => {
+        this.$axios({
+          url: `/user/images/${item.id}`,
+          method: 'delete'
+        }).then((result) => {
+          this.getMaterial()
+        })
+      })
     }
   },
   created () {
@@ -96,7 +127,7 @@ export default {
 </script>
 
 <style lang='less' scoped>
-    .img-list {
+.img-list {
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
@@ -121,5 +152,5 @@ export default {
       }
     }
   }
-    }
+}
 </style>
