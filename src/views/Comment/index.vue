@@ -11,7 +11,7 @@
       <el-table-column label="评论状态" :formatter="formatter" prop="comment_status"></el-table-column>
       <el-table-column label="总评论数" prop="total_comment_count"></el-table-column>
       <el-table-column label="粉丝评论数" prop="fans_comment_count"></el-table-column>
-      <el-table-column label="操作" prop="fans_operate">
+      <el-table-column label="操作">
         <!-- 作用域插槽 -->
         <template slot-scope="obj">
           <el-button type="text">修改评论</el-button>
@@ -23,6 +23,16 @@
         </template>
       </el-table-column>
     </el-table>
+    <el-row type="flex" justify="center" style="margin:20px 0">
+      <el-pagination
+        background
+        layout="prev, pager, next"
+        :page-size="page.pageSize"
+        :total="page.total"
+        :current-page="page.currentPage"
+        @current-change = changePage
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -30,10 +40,20 @@
 export default {
   data () {
     return {
-      list: []
+      list: [],
+      page: {
+        pageSize: 10,
+        currentPage: 1,
+        total: 0
+      }
     }
   },
   methods: {
+    // 页面改变事件    页面改变时触发
+    changePage (newPage) {
+      this.page.currentPage = newPage // 将当前最新的页面赋值给page中的页面
+      this.getComment() // 获取当前newPage页面
+    },
     closeOrOpen (row) {
       let msg = row.comment_status ? '关闭' : '打开'
       this.$confirm(`您确定要${msg}评论吗?`, '提示').then(() => {
@@ -53,14 +73,20 @@ export default {
       })
     },
     getComment () {
+      let pageParams = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize // 页面参数
+      }
       this.$axios({
         url: '/articles',
         params: {
-          response_type: 'comment'
+          response_type: 'comment', // 查询评论相关的数据
+          ...pageParams
         }
-      }).then(res => {
-        console.log(res.data.results)
-        this.list = res.data.results
+      }).then(result => {
+        console.log(result)
+        this.list = result.data.results // 取到列表数据 给 当前的数据对象
+        this.page.total = result.data.total_count // 文章评论列表总数 赋值给当前页面总数
       })
     },
     // row 当条数据对象
@@ -71,7 +97,7 @@ export default {
     // 类似过滤器
     // formatter 是elementUI提供的 ,过滤器是Vue自身特性
     formatter (row, column, cellValue, index) {
-      return cellValue ? '打开' : '关闭'
+      return cellValue ? '正常' : '关闭'
     }
   },
   created () {
