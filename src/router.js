@@ -31,6 +31,11 @@ export default new Router({
         path: '/home/comment',
         name: 'Comment',
         component: () => import(/* webpackChunkName: "Comment" */ './views/Comment')
+      },
+      { // 素材列表
+        path: '/home/material',
+        name: 'Material',
+        component: () => import(/* webpackChunkName:"Material" */ './views/Material')
       }]
     },
     {
