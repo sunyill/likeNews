@@ -40,6 +40,11 @@ export default new Router({
         path: '/home/contentList',
         name: 'ContentList',
         component: () => import(/* webpackChunkName:'ContentList' */ './views/Articles')
+      },
+      {
+        path: '/home/publish',
+        name: 'Publish',
+        component: () => import(/* webpackChunk:'Publish' */ './views/Publish')
       }]
     },
     {
