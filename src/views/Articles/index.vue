@@ -51,9 +51,11 @@
           </div>
         </div>
         <div class="right">
-          <span>
+          <span style="cursor:pointer">
             <i class="el-icon-edit-outline"></i>修改
-            <i class="el-icon-delete"></i>删除
+          </span>
+          <span style="cursor:pointer" @click="handleDelete(item)">
+            <i class="el-icon-delete" ></i>删除
           </span>
         </div>
       </div>
@@ -65,7 +67,6 @@
         :page-size="page.pageSize"
         :current-page="page.currentPage"
         :total="page.total"
-
         @current-change="pageChange"
       ></el-pagination>
     </el-row>
@@ -94,6 +95,18 @@ export default {
     }
   },
   methods: {
+    // 点击删除
+    handleDelete (item) {
+      this.$confirm('您确定要删除此条数据吗?', '提示').then(() => {
+        this.$axios({
+          url: `/articles/${item.id.toString()}`,
+          method: 'delete'
+        }).then(() => {
+          // 重新请求
+          this.getArticles(this.getCondition())
+        })
+      })
+    },
     // 分页事件
     pageChange (newPage) {
       this.page.currentPage = newPage
@@ -131,7 +144,7 @@ export default {
       params.page = this.page.currentPage
       params.per_page = this.page.pageSize
       return params
-    //   this.getArticles(params) // 调用查询接口, 传入参数
+      //   this.getArticles(params) // 调用查询接口, 传入参数
     },
     // 刷新列表数据 状态改变/频道切换/日期改变 都会触发
     changeArticleStatus () {
