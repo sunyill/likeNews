@@ -4,7 +4,7 @@
       <template slot="title">内容列表</template>
     </bread-crumb>
     <el-form style="margin-left:30px">
-      <el-form-item label="文章状态" >
+      <el-form-item label="文章状态">
         <el-radio-group v-model="formData.status" @change="changeArticleStatus">
           <el-radio :label="5">全部</el-radio>
           <el-radio :label="0">草稿</el-radio>
@@ -14,21 +14,16 @@
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="频道列表" @change="changeArticleStatus" >
+      <el-form-item label="频道列表" @change="changeArticleStatus">
         <el-select placeholder="请输入你喜爱的频道" v-model="formData.channel_id">
-          <el-option
-            v-for="item in channels"
-            :key="item.id"
-            :label="item.name"
-            :value="item.id"
-          ></el-option>
+          <el-option v-for="item in channels" :key="item.id" :label="item.name" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item label="时间选择">
-          <!-- 使用format指定输入框的格式；使用value-format指定绑定值的格式 -->
+        <!-- 使用format指定输入框的格式；使用value-format指定绑定值的格式 -->
         <el-date-picker
-        @change="changeArticleStatus"
+          @change="changeArticleStatus"
           v-model="formData.dateRange"
           type="daterange"
           value-format="yyyy-MM-dd"
@@ -38,31 +33,42 @@
       </el-form-item>
     </el-form>
 
-    <div class="total_title">
-        共找到{{page.total}}条数据
-    </div>
+    <div class="total_title">共找到{{page.total}}条数据</div>
     <!-- 内容列表 -->
     <div class="content-list">
-        <div class="content-item" v-for="(item,index) in list" :key="index">
-            <!-- 左侧内容 -->
-            <div class="left">
-                <img :src="item.cover.images[0]" alt="">
-                <!-- 内容信息 -->
-                <div class="info">
-                    <span>{{item.title}}</span>
-                    <el-tag style="width:60px" :type='item.status | textStatus'>{{item.status | textTypeInfo}}</el-tag>
-                    <span class='date'>{{item.pubdate}}</span>
-                </div>
-
-            </div>
-            <div class="right">
-                <span>
-                    <i class="el-icon-edit-outline"></i>修改
-                    <i class="el-icon-delete"></i>删除
-                </span>
-            </div>
+      <div class="content-item" v-for="(item,index) in list" :key="index">
+        <!-- 左侧内容 -->
+        <div class="left">
+          <img :src="item.cover.images[0]" alt />
+          <!-- 内容信息 -->
+          <div class="info">
+            <span>{{item.title}}</span>
+            <el-tag
+              style="width:60px"
+              :type="item.status | textStatus"
+            >{{item.status | textTypeInfo}}</el-tag>
+            <span class="date">{{item.pubdate}}</span>
+          </div>
         </div>
+        <div class="right">
+          <span>
+            <i class="el-icon-edit-outline"></i>修改
+            <i class="el-icon-delete"></i>删除
+          </span>
+        </div>
+      </div>
     </div>
+    <el-row type="flex" justify="center" style="margin-top:20px">
+      <el-pagination
+        background
+        layout="prev,pager,next"
+        :page-size="page.pageSize"
+        :current-page="page.currentPage"
+        :total="page.total"
+
+        @current-change="pageChange"
+      ></el-pagination>
+    </el-row>
   </el-card>
 </template>
 
@@ -81,39 +87,24 @@ export default {
       channels: [], // 频道数组
       list: [], // 内容列表
       page: {
+        pageSize: 10,
+        currentPage: 1,
         total: 0
-      },
-      options: [
-        {
-          value: '选项1',
-          label: '黄金糕'
-        },
-        {
-          value: '选项2',
-          label: '双皮奶'
-        },
-        {
-          value: '选项3',
-          label: '蚵仔煎'
-        },
-        {
-          value: '选项4',
-          label: '龙须面'
-        },
-        {
-          value: '选项5',
-          label: '北京烤鸭'
-        }
-      ]
+      }
     }
   },
   methods: {
+    // 分页事件
+    pageChange (newPage) {
+      this.page.currentPage = newPage
+      this.getArticles(this.getCondition()) // 查询数据
+    },
     // 文章列表
     getArticles (params) {
       this.$axios({
         url: '/articles',
         params: { ...params }
-      }).then((res) => {
+      }).then(res => {
         console.log(res)
         this.list = res.data.results
         this.page.total = res.data.total_count
@@ -123,13 +114,13 @@ export default {
     getChannels () {
       this.$axios({
         url: '/channels'
-      }).then((res) => {
+      }).then(res => {
         console.log(res)
         this.channels = res.data.channels
       })
     },
-    // 切换radioGroup 触发的change事件
-    changeArticleStatus () {
+    // 获取条件 A状态改变 + B频道切换 + C日期改变
+    getCondition () {
       let { status, channel_id: cid, dateRange } = this.formData // 解构赋值
       let params = {
         status: status === 5 ? '' : status, // status默认是5, 如果是5的话,不能传
@@ -137,7 +128,16 @@ export default {
         begin_pubdate: dateRange && dateRange.length ? dateRange[0] : null,
         end_pubdate: dateRange && dateRange.length > 1 ? dateRange[1] : null
       }
-      this.getArticles(params) // 调用查询接口, 传入参数
+      params.page = this.page.currentPage
+      params.per_page = this.page.pageSize
+      return params
+    //   this.getArticles(params) // 调用查询接口, 传入参数
+    },
+    // 刷新列表数据 状态改变/频道切换/日期改变 都会触发
+    changeArticleStatus () {
+      // 当筛选条件改变时, 应将页面回置第一页
+      this.page.currentPage = 1
+      this.getArticles(this.getCondition())
     }
   },
   // 过滤器
@@ -171,7 +171,7 @@ export default {
     }
   },
   created () {
-    this.getArticles()
+    this.getArticles({ page: 1, per_page: 10 })
     this.getChannels()
   }
 }
@@ -179,7 +179,7 @@ export default {
 
 <style lang='less' scoped>
 .total_title {
-  height:60px;
+  height: 60px;
   line-height: 60px;
   border-bottom: 1px dashed #ccc;
 }
@@ -193,27 +193,28 @@ export default {
       display: flex;
       align-items: center;
       img {
-        width:150px;
+        width: 150px;
         height: 100px;
         border-radius: 4px;
       }
       .info {
-        margin-left:10px;
+        margin-left: 10px;
         display: flex;
         height: 100px;
         padding: 5px 0;
         flex-direction: column;
         justify-content: space-between;
         .date {
-          color:#999;
-          font-size:12px;
+          color: #999;
+          font-size: 12px;
         }
       }
     }
     .right {
-      span,span i {
-        font-size:12px;
-        color:#333
+      span,
+      span i {
+        font-size: 12px;
+        color: #333;
       }
       span {
         margin-right: 10px;
