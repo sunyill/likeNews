@@ -3,32 +3,35 @@
     <bread-crumb slot="header">
       <template slot="title">内容列表</template>
     </bread-crumb>
-    <el-form>
-      <el-form-item label="文章状态">
-        <el-radio-group v-model="radio">
-          <el-radio :label="1">全部</el-radio>
-          <el-radio :label="2">草稿</el-radio>
-          <el-radio :label="3">待审核</el-radio>
-          <el-radio :label="4">审核成功</el-radio>
-          <el-radio :label="4">审核失败</el-radio>
+    <el-form style="margin-left:30px">
+      <el-form-item label="文章状态" >
+        <el-radio-group v-model="formData.status" @change="changeArticleStatus">
+          <el-radio :label="5">全部</el-radio>
+          <el-radio :label="0">草稿</el-radio>
+          <el-radio :label="1">待审核</el-radio>
+          <el-radio :label="2">审核成功</el-radio>
+          <el-radio :label="3">审核失败</el-radio>
         </el-radio-group>
       </el-form-item>
 
-      <el-form-item label="频道列表">
-        <el-select placeholder="请输入你喜爱的频道" v-model="value">
+      <el-form-item label="频道列表" @change="changeArticleStatus" >
+        <el-select placeholder="请输入你喜爱的频道" v-model="formData.channel_id">
           <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
+            v-for="item in channels"
+            :key="item.id"
+            :label="item.name"
+            :value="item.id"
           ></el-option>
         </el-select>
       </el-form-item>
 
       <el-form-item label="时间选择">
+          <!-- 使用format指定输入框的格式；使用value-format指定绑定值的格式 -->
         <el-date-picker
-          v-model="value1"
+        @change="changeArticleStatus"
+          v-model="formData.dateRange"
           type="daterange"
+          value-format="yyyy-MM-dd"
           start-placeholder="开始日期"
           end-placeholder="结束日期"
         ></el-date-picker>
@@ -36,19 +39,19 @@
     </el-form>
 
     <div class="total_title">
-        共找到8921条数据
+        共找到{{page.total}}条数据
     </div>
     <!-- 内容列表 -->
     <div class="content-list">
         <div class="content-item" v-for="(item,index) in list" :key="index">
             <!-- 左侧内容 -->
             <div class="left">
-                <img src="../../assets/img/title_info.png" alt="">
+                <img :src="item.cover.images[0]" alt="">
                 <!-- 内容信息 -->
                 <div class="info">
-                    <span>我是内容标题</span>
-                    <el-tag style="width:60px">标签一</el-tag>
-                    <span class='date'>2019-08-22 17:21:31</span>
+                    <span>{{item.title}}</span>
+                    <el-tag style="width:60px" :type='item.status | textStatus'>{{item.status | textTypeInfo}}</el-tag>
+                    <span class='date'>{{item.pubdate}}</span>
                 </div>
 
             </div>
@@ -70,7 +73,16 @@ export default {
       radio: 1,
       value: '',
       value1: '',
-      list: [1, 2, 3, 4, 5],
+      formData: {
+        status: 5, // 默认选择是5-->全部
+        channel_id: null, // 定义频道ID, 当前选择的ID
+        dateRange: null // 定义的时间范围
+      },
+      channels: [], // 频道数组
+      list: [], // 内容列表
+      page: {
+        total: 0
+      },
       options: [
         {
           value: '选项1',
@@ -94,6 +106,73 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    // 文章列表
+    getArticles (params) {
+      this.$axios({
+        url: '/articles',
+        params: { ...params }
+      }).then((res) => {
+        console.log(res)
+        this.list = res.data.results
+        this.page.total = res.data.total_count
+      })
+    },
+    //  频道列表
+    getChannels () {
+      this.$axios({
+        url: '/channels'
+      }).then((res) => {
+        console.log(res)
+        this.channels = res.data.channels
+      })
+    },
+    // 切换radioGroup 触发的change事件
+    changeArticleStatus () {
+      let { status, channel_id: cid, dateRange } = this.formData // 解构赋值
+      let params = {
+        status: status === 5 ? '' : status, // status默认是5, 如果是5的话,不能传
+        channel_id: cid,
+        begin_pubdate: dateRange && dateRange.length ? dateRange[0] : null,
+        end_pubdate: dateRange && dateRange.length > 1 ? dateRange[1] : null
+      }
+      this.getArticles(params) // 调用查询接口, 传入参数
+    }
+  },
+  // 过滤器
+  filters: {
+    //   文章标签type的过滤器
+    textStatus (value) {
+      switch (value) {
+        case 0:
+          return 'warning'
+        case 1:
+          return 'success'
+        case 2:
+          return 'danger'
+        case 3:
+          return 'info'
+      }
+    },
+    textTypeInfo (value) {
+      switch (value) {
+        case 0:
+          return '草稿'
+        case 1:
+          return '待审核'
+        case 2:
+          return '已发表'
+        case 3:
+          return '审核失败'
+        case 4:
+          return '已删除'
+      }
+    }
+  },
+  created () {
+    this.getArticles()
+    this.getChannels()
   }
 }
 </script>
