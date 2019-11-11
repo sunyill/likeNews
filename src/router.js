@@ -45,6 +45,11 @@ export default new Router({
         path: '/home/publish',
         name: 'Publish',
         component: () => import(/* webpackChunk:'Publish' */ './views/Publish')
+      },
+      { // 编辑文章 传递id值
+        path: '/home/publish/:articleId',
+        name: 'Publish',
+        component: () => import(/* webpackChunk:'Publish' */ './views/Publish')
       }]
     },
     {

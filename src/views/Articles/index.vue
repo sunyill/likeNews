@@ -51,7 +51,7 @@
           </div>
         </div>
         <div class="right">
-          <span style="cursor:pointer">
+          <span style="cursor:pointer" @click="handleEdit(item)">
             <i class="el-icon-edit-outline"></i>修改
           </span>
           <span style="cursor:pointer" @click="handleDelete(item)">
@@ -95,6 +95,10 @@ export default {
     }
   },
   methods: {
+    // 点击编辑  编辑页面和发布页面是同一个页面
+    handleEdit (item) {
+      this.$router.push(`/home/publish/${item.id.toString()}`)
+    },
     // 点击删除
     handleDelete (item) {
       this.$confirm('您确定要删除此条数据吗?', '提示').then(() => {
