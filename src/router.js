@@ -41,7 +41,7 @@ export default new Router({
         name: 'ContentList',
         component: () => import(/* webpackChunkName:'ContentList' */ './views/Articles')
       },
-      {
+      { // 发布文章
         path: '/home/publish',
         name: 'Publish',
         component: () => import(/* webpackChunk:'Publish' */ './views/Publish')
