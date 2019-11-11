@@ -8,7 +8,7 @@
         <el-input style="width:400px" v-model="formData.title"></el-input>
       </el-form-item>
       <el-form-item label="内容" prop="content">
-        <el-input placeholder="请输入内容" v-model="formData.content" type="textarea" :rows="4"></el-input>
+        <quill-editor  style='width:800px;height:400px;margin-bottom:100px' placeholder="请输入内容" v-model="formData.content" type="textarea" :rows="4"></quill-editor>
       </el-form-item>
       <el-form-item label="封面">
         <el-radio-group prop="formData.cover.type">
@@ -44,7 +44,8 @@ export default {
         channel_id: null
       },
       rules: {
-        title: [{ required: true, message: '标题不能为空' },
+        title: [
+          { required: true, message: '标题不能为空' },
           { min: 5, max: 30, message: '请控制标题字数' }
         ],
         content: [{ required: true, message: '内容不能为空' }],
@@ -58,7 +59,7 @@ export default {
       let { articleId } = this.$route.params
       this.$axios({
         url: `/articles/${articleId}`
-      }).then((res) => {
+      }).then(res => {
         console.log(res.data)
         // 将文章数据给列表formdata
         this.formData = res.data
