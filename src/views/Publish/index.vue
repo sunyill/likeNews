@@ -53,6 +53,17 @@ export default {
     }
   },
   methods: {
+    // 通过文字ID 获取页面内容
+    getArticleByID () {
+      let { articleId } = this.$route.params
+      this.$axios({
+        url: `/articles/${articleId}`
+      }).then((res) => {
+        console.log(res.data)
+        // 将文章数据给列表formdata
+        this.formData = res.data
+      })
+    },
     // 频道列表
     getChannels () {
       this.$axios({
@@ -81,6 +92,8 @@ export default {
   },
   created () {
     this.getChannels()
+    let { articleId } = this.$route.params
+    articleId && this.getArticleByID()
   }
 }
 </script>
