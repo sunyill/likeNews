@@ -77,10 +77,18 @@ export default {
     publish (draft) {
       this.$refs.myForm.validate(isOK => {
         if (isOK) {
-          console.log('ok')
+          // console.log('ok')
+          /**
+           * 根据传值的不同, 显示是编辑  还是新增发布
+           */
+          let { articleId } = this.$route.params
+          let method = articleId ? 'put' : 'get'
+          let url = articleId ? `/articles/${articleId}` : '/articles'
           this.$axios({
-            url: '/articles',
-            method: 'post',
+            // url: '/articles',
+            // method: 'post',
+            url,
+            method,
             params: { draft },
             data: this.formData
           }).then(() => {
@@ -93,6 +101,7 @@ export default {
   created () {
     this.getChannels()
     let { articleId } = this.$route.params
+    // 如果id存在 就认为是新增,  如果不存在就是发布
     articleId && this.getArticleByID()
   }
 }
