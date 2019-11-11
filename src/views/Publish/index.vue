@@ -3,7 +3,7 @@
     <bread-crumb slot="header">
       <template slot="title">文章发布</template>
     </bread-crumb>
-    <el-form ref="myForm" :rules="rules" :model="formData" label-width="80px" class="publish-form">
+    <el-form ref="myForm" :rules="rules" :model="formData" label-width="60px" class="publish-form">
       <el-form-item label="标题" prop="title">
         <el-input style="width:400px" v-model="formData.title"></el-input>
       </el-form-item>
@@ -11,7 +11,7 @@
         <el-input placeholder="请输入内容" v-model="formData.content" type="textarea" :rows="4"></el-input>
       </el-form-item>
       <el-form-item label="封面">
-        <el-radio-group prop="formData.cover">
+        <el-radio-group prop="formData.cover.type">
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
@@ -25,8 +25,8 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="publish">发布</el-button>
-        <el-button>存入草稿</el-button>
+        <el-button type="primary" @click="publish(false)">发布</el-button>
+        <el-button @click="publish(true)">存入草稿</el-button>
       </el-form-item>
     </el-form>
   </el-card>
@@ -44,7 +44,9 @@ export default {
         channel_id: null
       },
       rules: {
-        title: [{ required: true, message: '标题不能为空' }],
+        title: [{ required: true, message: '标题不能为空' },
+          { min: 5, max: 30, message: '请控制标题字数' }
+        ],
         content: [{ required: true, message: '内容不能为空' }],
         channel_id: [{ required: true, message: '频道不能为空' }]
       }
@@ -61,10 +63,18 @@ export default {
       })
     },
     // 发布文章
-    publish () {
+    publish (draft) {
       this.$refs.myForm.validate(isOK => {
         if (isOK) {
           console.log('ok')
+          this.$axios({
+            url: '/articles',
+            method: 'post',
+            params: { draft },
+            data: this.formData
+          }).then(() => {
+            this.$router.push('/home/contentList')
+          })
         }
       })
     }
