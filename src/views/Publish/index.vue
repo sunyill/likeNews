@@ -11,12 +11,15 @@
         <quill-editor  style='width:800px;height:400px;margin-bottom:100px' placeholder="请输入内容" v-model="formData.content" type="textarea" :rows="4"></quill-editor>
       </el-form-item>
       <el-form-item label="封面">
-        <el-radio-group prop="formData.cover.type" @change = 'changeType'>
+        <el-radio-group v-model="formData.cover.type" @change = 'changeType'>
           <el-radio :label="1">单图</el-radio>
           <el-radio :label="3">三图</el-radio>
           <el-radio :label="0">无图</el-radio>
           <el-radio :label="-1">自动</el-radio>
         </el-radio-group>
+      </el-form-item>
+      <el-form-item>
+        <cover-image :type='formData.cover.type' :images='formData.cover.images'></cover-image>
       </el-form-item>
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">
@@ -40,8 +43,12 @@ export default {
       formData: {
         title: '',
         content: '',
-        cover: 0, // 默认无图
-        channel_id: null
+
+        channel_id: null,
+        cover: {
+          type: 0, // 默认无图
+          images: []
+        }
       },
       rules: {
         title: [

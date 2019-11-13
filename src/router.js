@@ -48,8 +48,8 @@ export default new Router({
       },
       { // 编辑文章 传递id值
         path: '/home/publish/:articleId',
-        name: 'Publish',
-        component: () => import(/* webpackChunk:'Publish' */ './views/Publish')
+        name: 'Edit',
+        component: () => import(/* webpackChunk:'Edit' */ './views/Publish')
       }]
     },
     {
