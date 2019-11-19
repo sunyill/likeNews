@@ -17,7 +17,7 @@
 
 <script>
 export default {
-  props: ['type', 'images'],
+  props: ['images'],
   data () {
     return {
       selectIndex: -1, // 默认为-1

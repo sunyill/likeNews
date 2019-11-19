@@ -19,7 +19,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <cover-display @updateImages='updateImages' :type='formData.cover.type' :images='formData.cover.images'></cover-display>
+        <cover-display @updateImages='updateImages' :images='formData.cover.images'></cover-display>
       </el-form-item>
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">

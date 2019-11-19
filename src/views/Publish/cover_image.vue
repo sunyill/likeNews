@@ -2,7 +2,7 @@
 封面图片
  */
  <template>
-  <el-card>
+  <el-card v-loading="loading">
     <el-tabs v-model="activeName">
       <el-tab-pane label="素材库" name="material">
         <div class="material-list">
@@ -22,7 +22,16 @@
         </el-row>
       </el-tab-pane>
 
-      <el-tab-pane label="上传照片" name="upload">上传照片</el-tab-pane>
+      <el-tab-pane label="上传照片" name="upload">
+        <el-upload
+          action
+          :http-request="uploadImg"
+          class="avatar-uploader"
+          :show-file-list="false"
+        >
+          <i class="el-icon-plus avatar-uploader-icon"></i>
+        </el-upload>
+      </el-tab-pane>
     </el-tabs>
   </el-card>
 </template>
@@ -31,6 +40,7 @@
 export default {
   data () {
     return {
+      loading: false,
       activeName: 'material',
       list: [],
       page: {
@@ -41,6 +51,20 @@ export default {
     }
   },
   methods: {
+    // uploadImg上传图片
+    uploadImg (params) {
+      this.loading = true
+      let data = new FormData()
+      data.append('image', params.file) // 上传参数
+      this.$axios({
+        url: '/user/images',
+        method: 'post',
+        data
+      }).then((res) => {
+        this.loading = false
+        this.$emit('selectImage', res.data.url) // 传出地址
+      })
+    },
     // 分页切换
     changePage (nowPage) {
       // 将新页码数赋值
@@ -52,11 +76,14 @@ export default {
       this.$emit('selectImage', item.url)
     },
     getMaterial () {
-      let pageParams = { page: this.page.currentPage, per_page: this.page.pageSize }
+      let pageParams = {
+        page: this.page.currentPage,
+        per_page: this.page.pageSize
+      }
       this.$axios({
         url: '/user/images',
         params: { collect: false, ...pageParams }
-      }).then((res) => {
+      }).then(res => {
         console.log(res)
         this.list = res.data.results
         this.page.total = res.data.total_count
@@ -85,4 +112,27 @@ export default {
     }
   }
 }
+.avatar-uploader .el-upload {
+    border: 1px dashed #d9d9d9;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+  .avatar-uploader .el-upload:hover {
+    border-color: #409EFF;
+  }
+  .avatar-uploader-icon {
+    font-size: 28px;
+    color: #8c939d;
+    width: 178px;
+    height: 178px;
+    line-height: 178px;
+    text-align: center;
+  }
+  .avatar {
+    width: 178px;
+    height: 178px;
+    display: block;
+  }
 </style>
