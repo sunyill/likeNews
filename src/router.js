@@ -50,6 +50,11 @@ export default new Router({
         path: '/home/publish/:articleId',
         name: 'Edit',
         component: () => import(/* webpackChunk:'Edit' */ './views/Publish')
+      },
+      { // 个人信息
+        path: '/home/account',
+        name: 'Account',
+        component: () => import(/* webpackChunk:'Account' */ './views/Account')
       }]
     },
     {
