@@ -11,7 +11,8 @@ import 'quill/dist/quill.bubble.css'
 
 import { quillEditor } from 'vue-quill-editor'
 
-import coverImage from '../views/Publish/image_cover.vue' // 封面页组件
+import coverdisplay from '../views/Publish/image_display.vue' // 封面页组件
+import coverImage from '../views/Publish/cover_image.vue' // 选择图片组件
 // elementUI中导出的一个对象,并提供一个方法 install
 export default {
   install (Vue) {
@@ -19,6 +20,7 @@ export default {
     Vue.component('layout-header', layoutHeader)
     Vue.component('bread-crumb', breadCrumb) // 注册面包屑组件
     Vue.component('quill-editor', quillEditor)
+    Vue.component('cover-display', coverdisplay)
     Vue.component('cover-image', coverImage)
   }
 }

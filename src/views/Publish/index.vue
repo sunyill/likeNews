@@ -19,7 +19,7 @@
         </el-radio-group>
       </el-form-item>
       <el-form-item>
-        <cover-image :type='formData.cover.type' :images='formData.cover.images'></cover-image>
+        <cover-display @updateImages='updateImages' :type='formData.cover.type' :images='formData.cover.images'></cover-display>
       </el-form-item>
       <el-form-item label="频道" prop="channel_id">
         <el-select v-model="formData.channel_id">
@@ -61,6 +61,14 @@ export default {
     }
   },
   methods: {
+    // updateImages
+    updateImages (url, index) {
+      // 接收封面组件传递的 url, index
+      this.formData.cover.images = this.formData.cover.images.map((item, i) => {
+        return i === index ? url : item
+      })
+    },
+
     // 选择图片:一图\三图\无图\自动
     changeType () {
       if (this.formData.cover.type === 1) {
