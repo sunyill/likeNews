@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import Eventbus from '@/views/Utils/eventBus.js'
 export default {
   data () {
     return {
@@ -43,7 +44,7 @@ export default {
       rules: {
         name: [
           { required: true, message: '用户名称不能为空' },
-          { min: 2, max: 10, message: '用户名称必须控制在2到10个字符' }
+          { min: 1, max: 7, message: '用户名称必须控制在1至7个字符' }
         ],
         email: [
           {
@@ -70,6 +71,7 @@ export default {
         data
       }).then(res => {
         this.formData.photo = res.data.photo
+        Eventbus.$emit('updateUserInfoSuccess')
         this.loading = false
         this.$message({ message: '上传头像成功', type: 'success' })
       })

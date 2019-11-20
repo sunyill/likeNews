@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import Eventbus from '@/views/Utils/eventBus.js'
 export default {
   data () {
     return {
@@ -54,6 +55,10 @@ export default {
   },
   created () {
     this.getUserInfo()
+    // 监听获取的别人更新数据的消息
+    Eventbus.$on('updateUserInfoSuccess', () => {
+      this.getUserInfo() // 重新获取一遍信息
+    })
   }
 }
 </script>
