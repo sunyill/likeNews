@@ -15,6 +15,10 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
+      path: '*', // 通配符
+      component: () => import('@/views/UnDefined')
+    },
+    {
       path: '/',
       redirect: '/home'
     },
