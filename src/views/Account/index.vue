@@ -1,5 +1,5 @@
 <template>
-  <el-card>
+  <el-card v-loading="loading">
     <bread-crumb slot="header">
       <template slot="title">账号信息</template>
     </bread-crumb>
@@ -20,8 +20,10 @@
       <el-form-item>
         <el-button type="primary" @click="saveUserInfo">保存信息</el-button>
       </el-form-item>
-      <img class="head-img" :src="formData.photo?formData.photo:imgUrl" alt />
     </el-form>
+    <el-upload class="head-img" action :show-file-list="false" :http-request="uploadImg">
+      <img :src="formData.photo?formData.photo:imgUrl" alt />
+    </el-upload>
   </el-card>
 </template>
 
@@ -29,6 +31,7 @@
 export default {
   data () {
     return {
+      loading: false,
       imgUrl: require('../../assets/img/title_info.png'),
       formData: {
         name: '',
@@ -38,28 +41,49 @@ export default {
         photo: ''
       },
       rules: {
-        name: [{ required: true, message: '用户名称不能为空' },
+        name: [
+          { required: true, message: '用户名称不能为空' },
           { min: 2, max: 10, message: '用户名称必须控制在2到10个字符' }
         ],
-        email: [{
-          required: true, message: '邮箱不能为空'
-        },
-        { pattern: /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/, message: '邮箱格式不正确' }
+        email: [
+          {
+            required: true,
+            message: '邮箱不能为空'
+          },
+          {
+            pattern: /^\w+((.\w+)|(-\w+))@[A-Za-z0-9]+((.|-)[A-Za-z0-9]+).[A-Za-z0-9]+$/,
+            message: '邮箱格式不正确'
+          }
         ]
       }
     }
   },
   methods: {
+    // 修改上传头像
+    uploadImg (params) {
+      this.loading = true
+      var data = new FormData()
+      data.append('photo', params.file)
+      this.$axios({
+        url: '/user/photo',
+        method: 'patch',
+        data
+      }).then(res => {
+        this.formData.photo = res.data.photo
+        this.loading = false
+        this.$message({ message: '上传头像成功', type: 'success' })
+      })
+    },
     getPersonInfo () {
       this.$axios({
         url: '/user/profile'
-      }).then((res) => {
+      }).then(res => {
         this.formData = res.data
       })
     },
     // 保存用户信息
     saveUserInfo () {
-      this.$refs.myForm.validate((isOk) => {
+      this.$refs.myForm.validate(isOk => {
         if (isOk) {
           this.$axios({
             url: '/user/profile',
@@ -83,8 +107,10 @@ export default {
   position: absolute;
   left: 700px;
   top: 150px;
-  height: 200px;
-  width: 200px;
-  border-radius: 50%;
+  img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+  }
 }
 </style>
