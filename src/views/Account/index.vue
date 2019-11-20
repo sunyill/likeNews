@@ -92,6 +92,7 @@ export default {
             method: 'patch',
             data: this.formData
           }).then(() => {
+            Eventbus.$emit('updateUserInfoSuccess')
             this.$message({ message: '用户名保存成功', type: 'success' })
           })
         }

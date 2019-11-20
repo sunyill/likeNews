@@ -1,6 +1,9 @@
 import router from '../../router'
+import nprogress from 'nprogress'
+import 'nprogress/nprogress.css' // 引入样式
 // 路由首页, 进行鉴权
 router.beforeEach(function (to, from, next) {
+  nprogress.start()
   if (to.path.startsWith('/home')) {
     // 从内存中取token
     var result = window.localStorage.getItem('user-info')
@@ -20,5 +23,8 @@ router.beforeEach(function (to, from, next) {
   } else { // 不是以home页进行登录查看, 直接放行
     next()
   }
+})
+router.afterEach(() => {
+  nprogress.done()
 })
 export default router
