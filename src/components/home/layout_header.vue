@@ -2,7 +2,7 @@
   <!-- 属性gutter 表示每一栏之间的间隔 -->
   <el-row class="layout-header" type="flex" justify="space-between">
     <el-col :span="16" class="left-header">
-      <i class="el-icon-s-unfold"></i>
+      <i :class="currentClass" @click="OpenOrClose"></i>
       <span>ElementUi工作室</span>
     </el-col>
 
@@ -28,6 +28,7 @@ import Eventbus from '@/views/Utils/eventBus.js'
 export default {
   data () {
     return {
+      currentClass: 'el-icon-s-fold',
       user: {},
       defaultImg: require('../../assets/img/avatar.jpg')
     }
@@ -51,6 +52,12 @@ export default {
       }).then(res => {
         this.user = res.data
       })
+    },
+    // 折叠或者关闭
+    OpenOrClose () {
+      // 触发了一个事件,打开或者关闭
+      Eventbus.$emit('collapseOrClose')
+      this.currentClass = this.currentClass === 'el-icon-s-fold' ? 'el-icon-s-unfold' : 'el-icon-s-fold'
     }
   },
   created () {

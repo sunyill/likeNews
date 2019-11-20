@@ -7,7 +7,7 @@
  -->
 <template>
   <el-container>
-    <el-aside style="width:200px;min-height:100vh;background-color:#bfd5d9">
+    <el-aside :style='{width}' style="min-height:100vh;background-color:#bfd5d9">
       <layout-aside></layout-aside>
     </el-aside>
     <el-container>
@@ -24,10 +24,22 @@
 <script>
 // import layoutAside from '@/components/home/layout_aside.vue'
 // import layoutHeader from '@/components/home/layout_header.vue'
+
+import Eventbus from '@/views/Utils/eventBus.js'
 export default {
+  data () {
+    return {
+      width: '200px'
+    }
+  },
   components: {
     // layoutAside,
     // layoutHeader
+  },
+  created () {
+    Eventbus.$on('collapseOrClose', () => {
+      this.width = this.width === '200px' ? '60px' : '200px'
+    })
   }
 }
 </script>

@@ -1,9 +1,16 @@
 <template>
   <div class="layout-aside">
     <div class="login">
-      <img src="../../assets/img/home_logo.png" alt />
+      <img :src="collapse?smallIcon:defaultImg" :style="{width:collapse? '30px':'200px'}" alt />
     </div>
-    <el-menu background-color="#bfd5d9" text-color="#fff" active-text-color="#ffd04b" router>
+    <el-menu
+      background-color="#bfd5d9"
+      :collapse="collapse"
+      :collapse-transition="false"
+      text-color="#fff"
+      active-text-color="#ffd04b"
+      router
+    >
       <el-menu-item index="/home">
         <i class="el-icon-s-home"></i>
         <span>首页</span>
@@ -24,7 +31,7 @@
         <template slot="title">
           <i class="el-icon-menu"></i>乐友管理
         </template>
-        <el-menu-item-group >
+        <el-menu-item-group>
           <el-menu-item style="color:green" index="/home/fansdata">图文数据</el-menu-item>
           <el-menu-item style="color:green" index="/home/fansinfo">乐友概况</el-menu-item>
           <el-menu-item style="color:green" index="/home/fansimg">乐友画像</el-menu-item>
@@ -40,8 +47,20 @@
 </template>
 
 <script>
+import Eventbus from '@/views/Utils/eventBus.js'
 export default {
-
+  data () {
+    return {
+      smallIcon: require('../../assets/img/small_ico.png'),
+      defaultImg: require('../../assets/img/home_logo.png'),
+      collapse: false
+    }
+  },
+  created () {
+    Eventbus.$on('collapseOrClose', () => {
+      this.collapse = !this.collapse
+    })
+  }
 }
 </script>
 
@@ -52,9 +71,9 @@ export default {
     text-align: center;
     background-color: #bfd;
     img {
-        vertical-align: middle;
-        width: 100%;
-        height: 100%;
+      vertical-align: middle;
+      width: 100%;
+      height: 100%;
     }
   }
 }
