@@ -50,6 +50,9 @@ axios.interceptors.response.use(function (response) {
       window.localStorage.clear()
       window.location.hash('/login')
       break
+    case 409:
+      message = '用户名已存在'
+      break
     case 507:
       message = '服务器数据库异常'
       break
