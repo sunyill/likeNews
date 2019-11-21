@@ -59,7 +59,13 @@ export default new Router({
         path: '/home/account',
         name: 'Account',
         component: () => import(/* webpackChunk:'Account' */ './views/Account')
-      }]
+      },
+      { // 粉丝列表
+        path: '/home/fansdata',
+        name: 'FansData',
+        component: () => import(/* webpackChunk:'Account' */ './views/Fans')
+      }
+      ]
     },
     {
       path: '/login',
