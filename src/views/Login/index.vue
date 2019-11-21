@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { LoginByUser } from '../../Api/login'
 export default {
   data () {
     // 定义一个自定义函数
@@ -72,11 +73,12 @@ export default {
       this.$refs.loginForm.validate(async isOk => {
         if (isOk) {
           // console.log('this is pass homePage')
-          let res = await this.$axios({
-            url: '/authorizations',
-            method: 'post',
-            data: this.formData
-          })
+          // let res = await this.$axios({
+          //   url: '/authorizations',
+          //   method: 'post',
+          //   data: this.formData
+          // })
+          let res = await LoginByUser(this.formData)
 
           window.localStorage.setItem('user-info', JSON.stringify(res.data))
           this.$router.push('./home')

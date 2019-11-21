@@ -97,20 +97,18 @@ export default {
       })
     },
     // 收藏或者取消
-    OkOrCancle (item) {
+    async OkOrCancle (item) {
       // is_collected 是否收藏,为true时,则是收藏,点击时,取反状态
       let msg = item.is_collected ? '取消收藏' : '收藏'
-      this.$confirm(`您确定要${msg}此图片吗?`, '提示').then(() => {
-        this.$axios({
-          url: `/user/images/${item.id}`,
-          method: 'put',
-          data: {
-            collect: !item.is_collected // 取相反的状态
-          }
-        }).then(result => {
-          this.getMaterial()
-        })
+      await this.$confirm(`您确定要${msg}此图片吗?`, '提示')
+      await this.$axios({
+        url: `/user/images/${item.id}`,
+        method: 'put',
+        data: {
+          collect: !item.is_collected // 取相反的状态
+        }
       })
+      this.getMaterial()
     },
     // 删除素材
     deleteMaterial (item) {
