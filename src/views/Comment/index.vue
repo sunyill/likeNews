@@ -55,10 +55,11 @@ export default {
       this.page.currentPage = newPage // 将当前最新的页面赋值给page中的页面
       this.getComment() // 获取当前newPage页面
     },
-    closeOrOpen (row) {
+    async closeOrOpen (row) {
       let msg = row.comment_status ? '关闭' : '打开'
-      this.$confirm(`您确定要${msg}评论吗?`, '提示').then(() => {
-        this.$axios({
+      try {
+        await this.$confirm(`您确定要${msg}评论吗?`, '提示')
+        await this.$axios({
           url: '/comments/status',
           method: 'put',
           params: {
@@ -67,30 +68,29 @@ export default {
           data: {
             allow_comment: !row.comment_status
           }
-        }).then(() => {
-          // 如果走到then, 说明上面已通过
-          this.getComment()
         })
-      })
+        // 如果走到then, 说明上面已通过
+        this.getComment()
+      } catch (err) {
+        console.log(err)
+      }
     },
-    getComment () {
+    async getComment () {
       this.loading = true
       let pageParams = {
         page: this.page.currentPage,
         per_page: this.page.pageSize // 页面参数
       }
-      this.$axios({
+      let result = await this.$axios({
         url: '/articles',
         params: {
           response_type: 'comment', // 查询评论相关的数据
           ...pageParams
         }
-      }).then(result => {
-        console.log(result)
-        this.list = result.data.results // 取到列表数据 给 当前的数据对象
-        this.page.total = result.data.total_count // 文章评论列表总数 赋值给当前页面总数
-        this.loading = false
       })
+      this.list = result.data.results // 取到列表数据 给 当前的数据对象
+      this.page.total = result.data.total_count // 文章评论列表总数 赋值给当前页面总数
+      this.loading = false
     },
     // row 当条数据对象
     // column 当前列的属性

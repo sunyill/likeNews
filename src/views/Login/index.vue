@@ -69,18 +69,17 @@ export default {
   },
   methods: {
     loginPass () {
-      this.$refs.loginForm.validate(isOk => {
+      this.$refs.loginForm.validate(async isOk => {
         if (isOk) {
           // console.log('this is pass homePage')
-          this.$axios({
+          let res = await this.$axios({
             url: '/authorizations',
             method: 'post',
             data: this.formData
-          }).then(res => {
-            console.log(res.data)
-            window.localStorage.setItem('user-info', JSON.stringify(res.data))
-            this.$router.push('./home')
           })
+
+          window.localStorage.setItem('user-info', JSON.stringify(res.data))
+          this.$router.push('./home')
         }
       })
     }
